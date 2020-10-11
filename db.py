@@ -23,6 +23,21 @@ def file2df(file_):
         new_df = pd.read_excel(name)
         return new_df
 
+def melt_df(df, feature):
+    """
+    ---What it does---
+        + Melts GapMinder raw dfs, to a df with 3 columns: country, year & feature.
+    ---What it needs---
+        + df: 1st column with countries & next columns with feature values for each country & year.
+        feature: string with the name of the feature.    
+    ---What it returns---
+        + new_df: dataframe with reordered data.
+    """
+    new_df = pd.melt(frame = df, id_vars = str(df.columns[0]), 
+                     value_vars = df.columns[1:], var_name = "year", 
+                     value_name = feature)
+    return new_df
+
 def clean_df(df):
     """
     ---What it does---
