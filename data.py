@@ -82,4 +82,49 @@ def df2file(df):
     """
     name = input("Name of the file WITHOUT .csv")
     path = str("C:\\Users\\34609\Documents\\Repos Git\\GapMinder_Python\\Raw_data\\" + name + ".csv")
-    df.to_csv(path, index = False)    
+    df.to_csv(path, index = False)
+
+def merge_all (feature_dict, keys):
+    """
+    ---What it does---
+    Using a dictionary of the csvs to merge, copies sed dictionary and deletes the first element.
+    Then, using the dropped element from the original, uses the merger function in the loop to join all df into one using the keys provided.
+    Lastly, drops all NaN values.
+    ---What it needs---
+        + A dictionary of csvs (feature_dict).
+        + Acess to the merger function.
+        + A key or keys (keys). Can be string or list.
+    ---What it returns---
+    A new df (new_df)
+    """
+
+    feature_dict_keys = list(feature_dict.keys())
+    print(f'Current dfs to merge: {feature_dict_keys}')
+    feature_copy = feature_dict.copy()
+
+    to_drop =  list(feature_dict.keys())[0]
+    del feature_copy[to_drop]
+    new_df = feature_dict[to_drop].copy()
+    
+    
+    for e in feature_copy.values():
+        new_df = merger (left_df= new_df, right_df= e, keys= keys)
+    
+    new_df = new_df.dropna()
+    return new_df
+
+def merger (left_df, right_df, keys):
+    """
+    ---What it does---
+    Merges two dfs on the selected keys and eliminates NaN values before returning the new df.
+    ---What it needs---
+        + A df to merge on the left (left_df)
+        + A df to merge on the rigth (right df)
+        + A key or keys (keys). Can be string or list.
+    ---What it returns---
+    A new df (new_df)
+    """
+
+    new_df = pd.merge(left = left_df, right = right_df, how = "outer", on = keys)
+
+    return new_df
