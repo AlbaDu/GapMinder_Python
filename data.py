@@ -12,7 +12,7 @@ def file2df(file_):
     ---What it returns---
         + new_df: dataframe containing the data from the file.
     """
-    path = "C:\\Users\\34609\Documents\\Repos Git\\GapMinder_Python\\Raw_data\\"
+    path = "F:\\Programacion\\1.BOOTCAMP\\Proyectos\\Gap_Minder\\Raw_data\\"
     
     if file_.endswith("csv"):
         name = str(path + file_)
