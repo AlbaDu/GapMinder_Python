@@ -59,14 +59,14 @@ def merge_all (feature_dict, keys):
           Then, using the dropped element from the original, uses the merger function in the loop to join all df into one using the keys provided.
           Lastly, drops all NaN values.
     ---What it needs---
-        + A dictionary of csvs (feature_dict).
+        + feature_dict: A dictionary of dataframes ().
         + Acess to the merger function.
-        + A key or keys (keys). Can be string or list.
+        + keys: A key or keys, can be string or list of strings.
     ---What it returns---
-        + A new df (new_df)
+        + new_df
     """
     feature_dict_keys = list(feature_dict.keys())
-    print(f'Current dfs to merge: {feature_dict_keys}')
+    #print(f'Current dfs to merge: {feature_dict_keys}')
     feature_copy = feature_dict.copy()
 
     to_drop =  list(feature_dict.keys())[0]
@@ -84,11 +84,11 @@ def merger (left_df, right_df, keys):
     ---What it does---
         + Merges two dfs on the selected keys and eliminates NaN values before returning the new df.
     ---What it needs---
-        + A df to merge on the left (left_df)
-        + A df to merge on the rigth (right df)
-        + A key or keys (keys). Can be string or list.
+        + left_df: A df to merge on the left.
+        + right df: A df to merge on the rigth.
+        + keys: A key or keys, can be string or list of strings.
     ---What it returns---
-        + A new df (new_df)
+        + new_df
     """
     new_df = pd.merge(left = left_df, right = right_df, how = "outer", on = keys)
     return new_df
