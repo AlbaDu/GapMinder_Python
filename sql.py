@@ -1,24 +1,11 @@
 import pymysql
-
-def new_db(name, connection = conn):
-    """
-    ---What it does---
-        + Creates a new_db in a SQLserver via Py.
-    ---What it needs---
-        + name: new_db name.    
-    ---What it returns---
-        + new_db: new DB in the SQLserver.
-    """
-    query = "CREATE database " + name + " ;" 
-    connection.cursor.execute(query)
-    connection.commit()   
-
-def new_table(name, connection = conn, df, columns, types, null, keys):   
+ 
+def new_table(name, df, columns, types, null, keys, connection):   
     """
     ---What it does---
         + Creates a new table in the DB, from an existing DF.
     ---What it needs---
-        + name: name of the new table, as string.
+        + tname: name of the new table, as string.
         + columns:
         + types:
         + null:
@@ -38,7 +25,31 @@ def new_table(name, connection = conn, df, columns, types, null, keys):
     connection.cursor.execute(query)
     connection.commit()
 
-def deconnection(connection = conn):
+def insert_data(name_table, df, connection):   
+    """
+    ---What it does---
+        + Creates a new table in the DB, from an existing DF.
+    ---What it needs---
+        + name: name of the new table, as string.
+        + columns:
+        + types:
+        + null:
+        + keys: 
+    ---What it returns---
+        + new_db: new DB in the SQLserver.   
+    """
+    query = "INSERT INTO " + name_table + " VALUES "
+
+    for i in range(df.shape[0]): 
+        query += "("
+        for j in range(df.shape[1]): 
+            query += str(df[df.columns.values[j]][i]) + ", "
+        query = query[:-2] + "), " 
+    query = query[:-2] + ";"
+    connection.cursor.execute(query)
+    connection.commit()   
+
+def deconnection(connection):
     """
     ---What it does---
         + Closes the connection between Py & SQL server.
