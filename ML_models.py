@@ -36,7 +36,6 @@ def main_sequence(merged, target, columns_for_train, column_for_test, year):
         """
                             ---What it does--
         This function checks the info, columns and shape of the df, printing them. Also it checks the presence of NaNs values on the df and prints them in case it founds them.
-
                             ---What it needs---
         A df object
         """
@@ -67,7 +66,6 @@ def main_sequence(merged, target, columns_for_train, column_for_test, year):
         """
         ---What it does---
         Filters by year inputed by the user.
-
         ---What it needs---
             - A df object (df)
                 * MUST contain either columns with the year searched for or a column named 'year'
@@ -290,11 +288,42 @@ def main_sequence(merged, target, columns_for_train, column_for_test, year):
     linear_model, linear_acc = creating_linear_model(X_train, y_train)
     logistic_model, logistic_acc = creating_logistic_regression (X_train, y_train)
     forest_model, forest_acc = creating_random_forest (X_train, y_train)
-    decission_trees, dt_acc = creating_decission_trees (X_train, y_train)
+    decission_trees_model, dt_acc = creating_decission_trees (X_train, y_train)
     gradient_boost_model, gboost_acc = creating_gradient_boost_classifier (X_train, y_train)
     xlg_boost, xlgb_acc = creating_xlgboost (X_train, y_train)
 
+    model_library = {
+        'Linear Model': linear_model,
+        'Logistic Model': logistic_model,
+        'Random Forest': forest_model,
+        'Decission Trees': decission_trees_model,
+        'Gradient Boost Classifier': gradient_boost_model,
+        'XLG Boost model':  xlg_boost
+        }
+
+    acc_library = pd.DataFrame({'models':
+        ['Linear Model', 'Logistic Model', 'Random Forest', 'Decission Trees', 'Gradient Boost Classifier', 'XLG Boost model'],
+        'accuracy': [linear_acc, logistic_acc, forest_acc, dt_acc, gboost_acc, xlgb_acc]})
+
+    max_acc = max(acc_library['accuracy'])
+    model_select = list(acc_library['models'].loc[acc_library['accuracy'] == max_acc])
 
 
+    print(f'Maximum accuracy of {max_acc}\n')
+    if len(model_select) == 1:
+        model_select = model_select
+    else:
+        print('The following models have matching accuracy. Which shall you prefer?:')
+        for e in range(len(model_select)):
+            print(f'{e+1}) {model_select[e]} (Type {e} for selection)')
+        print()
+        choice = int(input('Type your selection here: '))
+        if choice > 2:
+            print(f'{choice} not available, type it again')
+            choice = int(input('Type your selection here: '))
+        model_select = model_select[choice]
+    
+    print(f'{model_select} selected')
 
+    return model_library[model_select]
     
